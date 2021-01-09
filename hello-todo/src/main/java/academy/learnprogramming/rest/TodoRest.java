@@ -34,6 +34,8 @@ public class TodoRest {
 
     @Path("{id}")
     @GET
+    //with @PathParam I have to send here GET request with '/' slash in URL.
+    // e.g. http://192.168.0.38:8081/hello-todo/api/v1/todo/1
     public Todo getTodo(@PathParam("id") Long id) {
         return todoService.findTodoBYId(id);
     }
@@ -43,11 +45,15 @@ public class TodoRest {
     public List<Todo> getTodos() {
         return todoService.getTodos();
     }
+
+    @Path("status")
+    @POST
+    //with @QueryParam I have to send here POST request with '?' sign in URL.
+    // e.g. http://192.168.0.38:8081/hello-todo/api/v1/todo/status?id=3
+    public Response markAsCompleted(@QueryParam("id") Long id) {
+        Todo todo = todoService.findTodoBYId(id);
+        todo.setCompleted(true);
+        todoService.updateTodo(todo);
+        return Response.ok(todo).build();
+    }
 }
-
-
-
-
-
-
-
